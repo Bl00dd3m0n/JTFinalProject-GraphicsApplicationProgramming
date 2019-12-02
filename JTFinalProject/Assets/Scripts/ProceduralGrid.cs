@@ -13,11 +13,18 @@ public class ProceduralGrid : MonoBehaviour
 
     //grid settings
     public float cellSize = 1;
+
     public Vector3 gridOffset;
+
     public int gridSize;
     public Button addButton;
     public Button removeButton;
     public Text CellsText;
+
+    public float CellSpacing;
+    public Button addSpacingButton;
+    public Button removeSpacingButton;
+    public Text SpacingText;
     private void Awake()
     {
         mesh = GetComponent<MeshFilter>().mesh;
@@ -29,17 +36,36 @@ public class ProceduralGrid : MonoBehaviour
         MakeDiscreteProceduralGrid();
         UpdateMesh();
         addButton.onClick.AddListener(AddCells); 
-        removeButton.onClick.AddListener(RemoveCells);
+        removeButton.onClick.AddListener(RemoveCells);    
+        addSpacingButton.onClick.AddListener(AddSpace); 
+        removeSpacingButton.onClick.AddListener(RemoveSpace);
     }
 
-    public void AddCells()
+    void AddSpace()
+    {
+        CellSpacing += 1;
+        MakeDiscreteProceduralGrid();
+        Debug.Log("test");
+        UpdateMesh();
+    }
+
+    void RemoveSpace()
+    {
+        if (CellSpacing > 0)
+        {
+            CellSpacing -= 1;
+        }
+        MakeDiscreteProceduralGrid();
+        UpdateMesh();
+    }
+    void AddCells()
     {
         gridSize += 1;
         MakeDiscreteProceduralGrid();
         Debug.Log("test");
         UpdateMesh();
     }
-    public void RemoveCells()
+    void RemoveCells()
     {
         if (gridSize > 1)
         {
@@ -56,6 +82,7 @@ public class ProceduralGrid : MonoBehaviour
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
         CellsText.text = "Quad Cells" + gridSize;
+        SpacingText.text = "Spacing: " + CellSpacing;
     }
 
     void MakeDiscreteProceduralGrid()
@@ -72,10 +99,10 @@ public class ProceduralGrid : MonoBehaviour
         for (int x = 0; x < gridSize; x++) {
             for (int y = 0;y < gridSize; y++) {
                 Vector3 cellOffset = new Vector3(x* cellSize, 0, y*cellSize);
-                verticies[v] = new Vector3(-vertexOffset, x+y, -vertexOffset)  + cellOffset + gridOffset;
-                verticies[v+1] = new Vector3(-vertexOffset, x+y, vertexOffset) + cellOffset + gridOffset;
-                verticies[v+2] = new Vector3(vertexOffset, x+y, -vertexOffset) + cellOffset + gridOffset;
-                verticies[v+3] = new Vector3(vertexOffset, x+y, vertexOffset) + cellOffset + gridOffset;
+                verticies[v] = new Vector3(-vertexOffset, (x+y)*CellSpacing, -vertexOffset)  + cellOffset + gridOffset;
+                verticies[v+1] = new Vector3(-vertexOffset, (x+y)*CellSpacing, vertexOffset) + cellOffset + gridOffset;
+                verticies[v+2] = new Vector3(vertexOffset, (x+y)*CellSpacing, -vertexOffset) + cellOffset + gridOffset;
+                verticies[v+3] = new Vector3(vertexOffset, (x+y)*CellSpacing, vertexOffset) + cellOffset + gridOffset;
                 triangles[t+0] = v;
                 triangles[t+1] = triangles[t+4] = v+1;
                 triangles[t+2] = triangles[t+3] = v+2;
