@@ -23,13 +23,17 @@ public static class CubeMeshData
         new int[]{ 3,2,7,6 }
     };
 
-    public static Vector3[] faceVerticies(int dir)
+    public static Vector3[] faceVerticies(int dir, float scale,Vector3 pos)
     {
         Vector3[] fv = new Vector3[4];
         for(int i = 0; i < fv.Length;i++)
         {
-            fv[i] = verticies[faceTriangles[dir][i]];
+            fv[i] = (verticies[faceTriangles[dir][i]] * scale)+pos;
         }
         return fv;
+    }
+    public static Vector3[] faceVerticies(Direction dir, float scale, Vector3 pos)
+    {
+        return faceVerticies((int)dir, scale, pos);
     }
 }
