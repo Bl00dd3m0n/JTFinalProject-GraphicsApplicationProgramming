@@ -36,7 +36,7 @@ public class Destroy : MonoBehaviour
         if (timer >= 0.5)
         {
             int x = 1;
-            int y = 1;
+            int y = 50;
             int z = 1;
             if (Dir == 1)
             {
@@ -51,8 +51,9 @@ public class Destroy : MonoBehaviour
                 z = i;
             }
             i++;
-            Debug.Log(x + (size * (y + (size * z))));
-            vertices[triangles[i]] /= 2;
+            y = i;
+            x = i;
+            vertices[triangles[x + 1 *z]] /= 2;
             // Assign vertices to mesh
             mesh.vertices = vertices;
         }
